@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "homeassistant",
+  "repo": "homeassistant-stack-module",
+  "runtimeId": "homeassistant",
+  "lifecycle": "active",
+  "dependencies": [
+    "stack-foundation"
+  ],
+  "overlays": [
+    "stack.compose/homeassistant.yml",
+    "stack.config/homeassistant"
+  ]
+}
