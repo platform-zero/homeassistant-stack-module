@@ -1,3 +1,23 @@
-# homeassistant-stack-module
+# homeassistant stack module
 
-Stack module `homeassistant` extracted from `sso-stack-generator`.
+- Module id: `homeassistant`
+- Module repo: `homeassistant-stack-module`
+- Source repo: none declared
+- Lifecycle: `active`
+
+## Owned overlays
+- `stack.compose/homeassistant.yml`
+- `stack.config/homeassistant`
+
+## Dependencies
+- `stack-foundation`
+
+## Validation
+
+```sh
+./tests/validate.sh
+```
+
+## Lifecycle
+
+`active` modules are expected to keep `stack.module.json`, owned overlays, and `tests/validate.sh` in sync.
