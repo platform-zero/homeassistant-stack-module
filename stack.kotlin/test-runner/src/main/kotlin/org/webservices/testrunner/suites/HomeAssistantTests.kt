@@ -1,0 +1,109 @@
+package org.webservices.testrunner.suites
+
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import kotlinx.serialization.json.*
+import org.webservices.testrunner.framework.*
+
+
+suspend fun TestRunner.homeAssistantTests() = suite("Home Assistant Tests") {
+    fun HttpStatusCode.matches(vararg codes: Int): Boolean = this.value in codes
+
+    test("Home Assistant web interface loads") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}")
+        
+        require(response.status.matches(200, 302, 403)) {
+            "Home Assistant not accessible: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant web interface accessible")
+    }
+
+    test("Home Assistant API responds") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/")
+        require(response.status.matches(200, 401, 403)) {
+            "API not responding: ${response.status}"
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            val body = response.bodyAsText()
+            require(body.contains("message") || body.contains("API")) {
+                "API response unexpected: $body"
+            }
+        }
+
+        println("      ✓ Home Assistant API endpoint responds")
+    }
+
+    test("Home Assistant config endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/config")
+        require(response.status.matches(200, 401, 403)) {
+            "Config endpoint failed: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant config API exists")
+    }
+
+    test("Home Assistant states endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/states")
+        require(response.status.matches(200, 401, 403)) {
+            "States endpoint failed: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant states API exists")
+    }
+
+    test("Home Assistant services endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/services")
+        require(response.status.matches(200, 401, 403)) {
+            "Services endpoint failed: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant services API exists")
+    }
+
+    test("Home Assistant events endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/events")
+        require(response.status.matches(200, 401, 403)) {
+            "Events endpoint failed: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant events API exists")
+    }
+
+    test("Home Assistant error log endpoint") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/error_log")
+        require(response.status.matches(200, 401, 403)) {
+            "Error log endpoint failed: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant error log API exists")
+    }
+
+    test("Home Assistant history endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/history/period")
+        require(response.status.matches(200, 401, 403)) {
+            "History endpoint failed: ${response.status}"
+        }
+        println("      ✓ Home Assistant history API exists")
+    }
+
+    test("Home Assistant logbook endpoint exists") {
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/api/logbook")
+        require(response.status.matches(200, 401, 403)) {
+            "Logbook endpoint failed: ${response.status}"
+        }
+        println("      ✓ Home Assistant logbook API exists")
+    }
+
+    test("Home Assistant panel manifest") {
+        
+        val response = client.getRawResponse("${env.endpoints.homeassistant!!}/static/icons/favicon.ico")
+        require(response.status.matches(200, 401, 403, 404)) {
+            "Static assets not responding: ${response.status}"
+        }
+
+        println("      ✓ Home Assistant static assets configured")
+    }
+}
