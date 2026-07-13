@@ -20,7 +20,8 @@
     "stack.config/homeassistant",
     "stack.containers/test-runner/playwright-tests/tests/deep/forward-auth/homeassistant.spec.ts",
     "stack.kotlin/test-runner/src/test/kotlin/org/webservices/testrunner/HomeAssistantAuthConfigTest.kt",
-    "stack.kotlin/test-runner/src/main/kotlin/org/webservices/testrunner/suites/HomeAssistantTests.kt"
+    "stack.kotlin/test-runner/src/main/kotlin/org/webservices/testrunner/suites/HomeAssistantTests.kt",
+    "stack.runtime.yaml"
   ],
   "testAssets": []
 }
