@@ -13,7 +13,7 @@ class HomeAssistantAuthConfigTest {
     @Test
     fun `home assistant exposes keycloak edge auth through trusted frontend flow`() {
         val configuration = repoFileText("stack.config/homeassistant/configuration.yaml")
-        val compose = repoFileText("stack.compose/homeassistant.yml")
+        val compose = repoFileText("stack.runtime.yaml")
         val caddyfile = repoFileText("stack.config/caddy/Caddyfile")
         val domainToken = "{${'$'}DOMAIN}"
         val directBlock = siteBlock(caddyfile, "direct.homeassistant.$domainToken, direct.home.$domainToken")
