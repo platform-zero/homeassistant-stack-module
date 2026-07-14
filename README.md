@@ -6,7 +6,7 @@
 - Lifecycle: `active`
 
 ## Owned overlays
-- `stack.compose/homeassistant.yml`
+- `stack.runtime.yaml`
 - `stack.config/homeassistant`
 
 ## Dependencies
