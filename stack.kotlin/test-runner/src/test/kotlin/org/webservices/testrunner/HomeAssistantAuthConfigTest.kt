@@ -13,7 +13,7 @@ class HomeAssistantAuthConfigTest {
     @Test
     fun `home assistant exposes keycloak edge auth through trusted frontend flow`() {
         val configuration = repoFileText("stack.config/homeassistant/configuration.yaml")
-        val compose = repoFileText("stack.runtime.yaml")
+        val runtime = repoFileText("stack.runtime.yaml")
         val caddyfile = repoFileText("stack.config/caddy/Caddyfile")
         val domainToken = "{${'$'}DOMAIN}"
         val directBlock = siteBlock(caddyfile, "direct.homeassistant.$domainToken, direct.home.$domainToken")
@@ -22,14 +22,14 @@ class HomeAssistantAuthConfigTest {
         assertTrue(configuration.contains("- type: trusted_networks"))
         assertTrue(configuration.contains("name: Keycloak"))
         assertTrue(configuration.contains("- type: homeassistant"))
-        assertTrue(compose.contains("./configs/homeassistant/auth_keycloak.py:/usr/src/homeassistant/homeassistant/auth/providers/trusted_networks.py:ro"))
+        assertTrue(runtime.contains("./configs/homeassistant/auth_keycloak.py:/usr/src/homeassistant/homeassistant/auth/providers/trusted_networks.py:ro"))
 
         assertFalse(configuration.contains("allow_bypass_login"))
         assertFalse(configuration.contains("${retiredDirectoryId}_"))
-        assertFalse(compose.contains(retiredDirectoryEnvPrefix))
-        assertFalse(compose.contains("$retiredDirectoryId:"))
-        assertTrue(compose.contains("TRUSTED_PROXY_NETWORKS: 172.16.0.0/12"))
-        assertTrue(compose.contains("HOMEASSISTANT_TRUSTED_PROXY_SECRET: \${HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
+        assertFalse(runtime.contains(retiredDirectoryEnvPrefix))
+        assertFalse(runtime.contains("$retiredDirectoryId:"))
+        assertTrue(runtime.contains("TRUSTED_PROXY_NETWORKS: 172.16.0.0/12"))
+        assertTrue(runtime.contains("HOMEASSISTANT_TRUSTED_PROXY_SECRET: \${HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
         assertTrue(caddyfile.contains("header_up X-Trusted-Proxy-Secret {\$HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
 
         assertTrue(directBlock.contains("reverse_proxy homeassistant:8123"))
