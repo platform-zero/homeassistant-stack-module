@@ -28,7 +28,7 @@ class HomeAssistantAuthConfigTest {
         assertFalse(configuration.contains("${retiredDirectoryId}_"))
         assertFalse(runtime.contains(retiredDirectoryEnvPrefix))
         assertFalse(runtime.contains("$retiredDirectoryId:"))
-        assertTrue(runtime.contains("TRUSTED_PROXY_NETWORKS: 172.16.0.0/12"))
+        assertTrue(runtime.contains("TRUSTED_PROXY_NETWORKS: 10.89.0.0/16"))
         assertTrue(runtime.contains("HOMEASSISTANT_TRUSTED_PROXY_SECRET: \${HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
         assertTrue(caddyfile.contains("header_up X-Trusted-Proxy-Secret {\$HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
 
@@ -55,7 +55,7 @@ class HomeAssistantAuthConfigTest {
         assertTrue(provider.contains("Missing trusted edge identity"))
         assertTrue(provider.contains("async_validate_trusted_header_login"))
         assertTrue(provider.contains("@AUTH_PROVIDERS.register(\"trusted_networks\")"))
-        assertTrue(provider.contains("os.getenv(\"TRUSTED_PROXY_NETWORKS\", \"172.16.0.0/12\")"))
+        assertTrue(provider.contains("os.getenv(\"TRUSTED_PROXY_NETWORKS\", \"10.89.0.0/16\")"))
         assertTrue(provider.contains("HOMEASSISTANT_TRUSTED_PROXY_SECRET"))
         assertTrue(provider.contains("Invalid trusted proxy secret"))
         assertTrue(provider.contains("Missing trusted proxy secret configuration"))

@@ -37,7 +37,7 @@ CONF_TRUSTED_PROXY_SECRET_HEADER = "X-Trusted-Proxy-Secret"
 TRUSTED_PROXY_SECRET = os.getenv("HOMEASSISTANT_TRUSTED_PROXY_SECRET", "").strip()
 TRUSTED_PROXY_NETWORKS = [
     ip_network(value.strip())
-    for value in os.getenv("TRUSTED_PROXY_NETWORKS", "172.16.0.0/12").split(",")
+    for value in os.getenv("TRUSTED_PROXY_NETWORKS", "10.89.0.0/16").split(",")
     if value.strip()
 ]
 USERNAME_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
