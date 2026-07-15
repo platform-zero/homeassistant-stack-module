@@ -43,7 +43,7 @@ test.use({ storageState: authenticatedSessionState });
           await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
           await expect(page).not.toHaveURL(/\/auth\/(authorize|login_flow)/i);
           await expect(page).not.toHaveURL(/\/auth\/login/i);
-          expect(await page.locator('input[name="username"]').first().isVisible().catch(() => false)).toBeFalsy();
+          expect(await page.locator('input[name="username"]').first().isVisible().catch(() => false)).toBe(false);
           await waitForHomeAssistantShell(page);
           await expect(page.getByText(/^Overview$/i).first()).toBeVisible({ timeout: 30000 });
           await expect(page.getByText(/^Developer tools$/i).first()).toBeVisible({ timeout: 30000 });

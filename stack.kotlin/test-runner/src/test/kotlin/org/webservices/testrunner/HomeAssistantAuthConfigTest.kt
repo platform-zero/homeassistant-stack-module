@@ -79,7 +79,7 @@ class HomeAssistantAuthConfigTest {
     }
 
     private fun repoFileText(relativePath: String): String =
-        Files.readString(repoRoot().resolve(relativePath))
+        TestSourceFiles.moduleText("homeassistant", relativePath)
 
     private fun siteBlock(caddyfile: String, siteLabel: String): String {
         val start = caddyfile.indexOf(siteLabel)
