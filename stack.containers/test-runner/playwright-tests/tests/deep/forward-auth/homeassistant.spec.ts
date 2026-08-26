@@ -1,20 +1,37 @@
 import { test, expect } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
 import {
   authenticatedSessionState,
-  domain,
-  requireStackAdminCredentials,
-  screenshotRoot,
-  seafileOnlyOfficeFixturePath,
   testForwardAuthService,
-  waitForGrafanaShell,
   waitForHomeAssistantShell,
 } from '../shared/forward-auth';
 import { serviceUrl } from '../../../utils/stack-urls';
-import { logPageTelemetry, setupNetworkLogging } from '../../../utils/telemetry';
 
 test.use({ storageState: authenticatedSessionState });
+
+  test('Home Assistant - mobile OAuth query survives Keycloak edge auth', async ({ browser }) => {
+    const context = await browser.newContext();
+    const mobileAuthorizationUrl = serviceUrl(
+      'homeassistant',
+      '/auth/authorize?response_type=code&client_id=https%3A%2F%2Fhome-assistant.io%2Fandroid&redirect_uri=homeassistant%3A%2F%2Fauth-callback&state=mobile-redirect-contract'
+    );
+
+    try {
+      const response = await context.request.get(mobileAuthorizationUrl, { maxRedirects: 0 });
+      expect([302, 303]).toContain(response.status());
+
+      const keycloakLocation = response.headers().location;
+      expect(keycloakLocation).toBeTruthy();
+      const keycloakAuthorization = new URL(keycloakLocation);
+      expect(keycloakAuthorization.origin).toBe(new URL(serviceUrl('keycloak')).origin);
+      expect(keycloakAuthorization.searchParams.get('client_id')).toBe('webservices-edge');
+
+      const oauthState = keycloakAuthorization.searchParams.get('state') || '';
+      const returnUrl = oauthState.slice(oauthState.indexOf(':') + 1);
+      expect(returnUrl).toBe(mobileAuthorizationUrl);
+    } finally {
+      await context.close();
+    }
+  });
 
   test('Home Assistant - Access with forward auth', async ({ page }) => {
     test.setTimeout(120000);

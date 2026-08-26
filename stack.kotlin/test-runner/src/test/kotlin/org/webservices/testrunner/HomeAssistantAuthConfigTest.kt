@@ -31,6 +31,9 @@ class HomeAssistantAuthConfigTest {
         assertTrue(runtime.contains("TRUSTED_PROXY_NETWORKS: 10.89.0.0/16"))
         assertTrue(runtime.contains("HOMEASSISTANT_TRUSTED_PROXY_SECRET: \${HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
         assertTrue(caddyfile.contains("header_up X-Trusted-Proxy-Secret {\$HOMEASSISTANT_TRUSTED_PROXY_SECRET}"))
+        assertTrue(caddyfile.contains("header_up X-Auth-Request-Redirect {scheme}://{host}{orig_uri}"))
+        assertTrue(caddyfile.contains("rewrite * /oauth2/start"))
+        assertFalse(caddyfile.contains("/oauth2/start?rd={scheme}://{host}{uri}"))
 
         assertTrue(directBlock.contains("reverse_proxy homeassistant:8123"))
         assertTrue(directBlock.contains("header_up -Remote-User"))
