@@ -9,7 +9,7 @@ import { serviceUrl } from '../../../utils/stack-urls';
 test.use({ storageState: authenticatedSessionState });
 
   test('Home Assistant - mobile OAuth query survives Keycloak edge auth', async ({ browser }) => {
-    const context = await browser.newContext();
+    const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
     const mobileAuthorizationUrl = serviceUrl(
       'homeassistant',
       '/auth/authorize?response_type=code&client_id=https%3A%2F%2Fhome-assistant.io%2Fandroid&redirect_uri=homeassistant%3A%2F%2Fauth-callback&state=mobile-redirect-contract'
