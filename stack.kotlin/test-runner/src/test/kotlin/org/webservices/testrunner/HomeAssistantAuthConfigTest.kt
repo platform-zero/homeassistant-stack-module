@@ -22,6 +22,8 @@ class HomeAssistantAuthConfigTest {
         assertTrue(configuration.contains("- type: trusted_networks"))
         assertTrue(configuration.contains("name: Keycloak"))
         assertTrue(configuration.contains("- type: homeassistant"))
+        assertTrue(configuration.contains("use_x_forwarded_for: true"))
+        assertTrue(configuration.contains("- 10.89.0.0/16"))
         assertTrue(runtime.contains("./configs/homeassistant/auth_keycloak.py:/usr/src/homeassistant/homeassistant/auth/providers/trusted_networks.py:ro"))
 
         assertFalse(configuration.contains("allow_bypass_login"))
