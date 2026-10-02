@@ -95,22 +95,9 @@ class KeycloakTrustedAuthProvider(AuthProvider):
         address = ip_address(str(ip_addr))
         if not any(address in network for network in TRUSTED_PROXY_NETWORKS):
             raise InvalidAuthError("Not in trusted proxy networks")
-        request = current_request.get(None)
-        if request is None:
-            raise InvalidAuthError("Missing trusted proxy request")
-        if not TRUSTED_PROXY_SECRET:
-            raise InvalidAuthError("Missing trusted proxy secret configuration")
-        if not hmac.compare_digest(
-            request.headers.get(CONF_TRUSTED_PROXY_SECRET_HEADER, ""),
-            TRUSTED_PROXY_SECRET,
-        ):
-            raise InvalidAuthError("Invalid trusted proxy secret")
-        username = request.headers.get(
-            self.trusted_remote_user_header
-        ) or request.headers.get("X-Remote-User")
-        if not username:
-            raise InvalidAuthError("Missing trusted edge identity")
-        _canonicalize_username(username)
+        # Home Assistant calls this while listing auth providers, including for
+        # native clients that use its local password provider. Validate edge
+        # identity only when starting this provider's login flow below.
 
     async def async_validate_trusted_header_login(self) -> str | None:
         """Validate SSO username passed by a trusted reverse proxy header."""
